@@ -1,14 +1,13 @@
 from aiohttp import web
-from url_shortener import UrlShortener
-
-routes = web.RouteTableDef()
+from app.url_shortener import UrlShortener
 
 
-class Handler:
-    def __init__(self):
+class RequestHandler:
+    def __init__(self, domain):
         self.db = {
             'seed': 1
         }
+        self.domain = domain
 
     async def shorten_url(self, request):
         body = await request.json()
@@ -24,7 +23,7 @@ class Handler:
         # increment the counter
         self.db['seed'] += 1
 
-        return web.Response(text='{}/{}'.format('http://0.0.0.0:8080', key))
+        return web.Response(text='{}/{}'.format(self.domain, key))
 
     async def redirect(self, request):
         key = request.match_info['key']
@@ -33,17 +32,3 @@ class Handler:
             return web.HTTPFound(location=key)
         else:
             return web.HTTPNotFound()
-
-
-def init_func():
-    app = web.Application()
-
-    handler = Handler()
-    app.router.add_post('/', handler.shorten_url)
-    app.router.add_get('/{key}', handler.redirect)
-
-    web.run_app(app)
-
-
-if __name__ == '__main__':
-    init_func()
