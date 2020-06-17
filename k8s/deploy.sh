@@ -12,6 +12,8 @@ if [[ -z "${image_tag}" ]]; then
   exit 1
 fi
 
+helm dependency update ${helm_release}
+
 helm upgrade ${helm_release} \
   --debug \
   --atomic \

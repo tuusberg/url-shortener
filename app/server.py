@@ -11,7 +11,7 @@ class Server:
     def serve(self):
         app = web.Application()
 
-        app.router.add_post('/', self.handler.shorten_url)
         app.router.add_get('/{key}', self.handler.redirect)
+        app.router.add_post('/', self.handler.shorten_url)
 
         web.run_app(app)
