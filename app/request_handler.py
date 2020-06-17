@@ -1,12 +1,11 @@
+from json import dumps
 from aiohttp import web
 from app.url_shortener import UrlShortener
 
 
 class RequestHandler:
     def __init__(self, domain):
-        self.db = {
-            'seed': 1
-        }
+        self.db = {}
         self.domain = domain
 
     async def shorten_url(self, request):
@@ -20,10 +19,13 @@ class RequestHandler:
         # TODO: store the key in the DB
         self.db[key] = url
 
-        # increment the counter
-        self.db['seed'] += 1
+        response = dumps({
+            'id': key,
+            'originalURL': url,
+            'shortURL': '{}/{}'.format(self.domain, key),
+        })
 
-        return web.Response(text='{}/{}'.format(self.domain, key))
+        return web.Response(body=response)
 
     async def redirect(self, request):
         key = request.match_info['key']
