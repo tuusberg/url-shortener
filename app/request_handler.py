@@ -1,14 +1,16 @@
 from json import dumps
 from aiohttp import web
 from app.url_shortener import UrlShortener
+from pymongo.errors import DuplicateKeyError
 
 
 class RequestHandler:
-    def __init__(self, domain):
-        self.db = {}
+    def __init__(self, db_client, domain):
+        self.db_client = db_client
+        self.db_collection = self.db_client['url-shortener']['urls']
         self.domain = domain
 
-    async def shorten_url(self, request):
+    async def shorten_url(self, request: web.Request):
         body = await request.json()
         if 'url' not in body:
             raise web.HTTPInternalServerError
@@ -16,21 +18,29 @@ class RequestHandler:
         url = body['url']
         key = UrlShortener.shorten(url)
 
-        # TODO: store the key in the DB
-        self.db[key] = url
-
-        response = dumps({
-            'id': key,
+        document = {
+            '_id': key,
             'originalURL': url,
             'shortURL': '{}/{}'.format(self.domain, key),
-        })
+        }
 
-        return web.Response(body=response)
+        try:
+            await self.db_collection.insert_one(document)
+        except DuplicateKeyError:
+            pass
 
-    async def redirect(self, request):
+        return web.Response(body=dumps(document))
+
+    async def redirect(self, request: web.Request):
         key = request.match_info['key']
-        if key in self.db:
-            # TODO: fix Maximum (50) redirects followed when there's no www in the domain name
-            return web.HTTPFound(location=key)
+
+        url = await self.db_collection.find_one(key)
+        url = url['originalURL'] if url else None
+
+        if url:
+            return web.Response(status=302, headers={
+                'Connection': 'close',
+                'Location': url
+            })
         else:
-            return web.HTTPNotFound()
+            return web.Response(status=404)
