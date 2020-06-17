@@ -3,7 +3,12 @@
 Url shortener service written in Python.
 The app is deployed to Kubernetes
 
-## Installation
+## Before you begin
+
+### Install Helm
+[Helm](https://helm.sh/) is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
+
+To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
 ### Locally
 
