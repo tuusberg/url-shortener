@@ -13,7 +13,10 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 
 if __name__ == '__main__':
-    db_client = AsyncIOMotorClient(config.DB_HOST, config.DB_PORT, username=config.DB_USER, password=config.DB_PASS)
+    db_client = AsyncIOMotorClient(config['DB_HOST'],
+                                   config['DB_PORT'],
+                                   username=config['DB_USER'],
+                                   password=config['DB_PASS'])
     domain = 'http://0.0.0.0:8080'
     handler = RequestHandler(db_client, domain)
     server = Server(handler)
