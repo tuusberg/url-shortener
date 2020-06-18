@@ -4,6 +4,14 @@
 
 replicaCount: 1
 
+app:
+  env:
+    - name: MONGODB_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: mongodb
+          key: mongodb-root-password
+
 image:
   repository: tuusberg/url-shortener
   pullPolicy: IfNotPresent
