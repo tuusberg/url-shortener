@@ -38,7 +38,7 @@ async def test_post_get(session):
 
 @molotov.scenario(weight=1)
 async def test_404(session):
-    # Then use that id for a redirect
+    # The following is guaranteed to throw 404
     short_id = 'something-that-does-not-exist'
     async with session.get(path.join(_API, short_id), allow_redirects=False) as response:
         assert response.status == 404
