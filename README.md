@@ -1,7 +1,20 @@
 # url-shortener
 
 Url shortener service written in Python.
-The app is deployed to Kubernetes
+
+## Usage:
+
+To shorten an URL:
+```bash
+curl <hostname> -X POST -d '{"url": "https://www.yahoo.com"}' -v
+```
+
+The resulting JSON has `_id` field which is a short form of the original URL. 
+
+To open a link:
+```bash
+curl <hostname>/<_id from JSON> -v
+```
 
 ## Before you begin
 
