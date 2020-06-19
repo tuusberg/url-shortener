@@ -43,4 +43,4 @@ class RequestHandler:
                 'Location': url
             })
         else:
-            return web.Response(status=404)
+            raise web.HTTPNotFound
