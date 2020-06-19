@@ -27,7 +27,7 @@ class RequestHandler:
         except DuplicateKeyError:
             pass
 
-        return web.Response(body=dumps(document))
+        return web.Response(body=dumps(document), content_type='application/json')
 
     async def redirect(self, request: web.Request):
         key = request.match_info['key']
