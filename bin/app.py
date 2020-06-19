@@ -14,7 +14,6 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 if __name__ == '__main__':
     db_client = AsyncIOMotorClient(config['DB_HOST'], config['DB_PORT'])
-    domain = 'http://0.0.0.0:8080'
-    handler = RequestHandler(db_client, domain)
+    handler = RequestHandler(db_client)
     server = Server(handler)
     server.serve()

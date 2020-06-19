@@ -5,10 +5,9 @@ from pymongo.errors import DuplicateKeyError
 
 
 class RequestHandler:
-    def __init__(self, db_client, domain):
+    def __init__(self, db_client):
         self.db_client = db_client
         self.db_collection = self.db_client['url-shortener']['urls']
-        self.domain = domain
 
     async def shorten_url(self, request: web.Request):
         body = await request.json()
@@ -21,7 +20,6 @@ class RequestHandler:
         document = {
             '_id': key,
             'originalURL': url,
-            'shortURL': '{}/{}'.format(self.domain, key),
         }
 
         try:
