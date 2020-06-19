@@ -14,7 +14,7 @@ app:
 
 image:
   repository: tuusberg/url-shortener
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
   tag: "v1" # TODO: replace tag with SHA
 
