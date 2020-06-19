@@ -6,19 +6,20 @@ Url shortener service written in Python.
 
 To shorten an URL:
 ```bash
-curl <hostname> -X POST -d '{"url": "https://www.yahoo.com"}' -v
+curl <hostname> -X POST -d '{"url": "https://www.yahoo.com"}'
 ```
 
 The resulting JSON has `_id` field which is a short form of the original URL. 
 
 To open a link:
 ```bash
-curl <hostname>/<_id from JSON> -v
+curl <hostname>/<_id from JSON> -L
 ```
 
 ## Before you begin
 
 ### Install Helm
+
 [Helm](https://helm.sh/) is a tool for managing Kubernetes charts. Charts are packages of pre-configured Kubernetes resources.
 
 To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
@@ -36,7 +37,7 @@ To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#
 ### Kubernetes
 
 * Make sure you have [helm](#install-helm) installed on your machine.
-* From `k8s` directory, run `./deploy <image tag>.` 
+* From `k8s` directory, run `./deploy <image tag>.`
 
 Helm will deploy the app and it's dependencies to the currently selected Kubernetes cluster.
 
@@ -44,8 +45,8 @@ Helm will deploy the app and it's dependencies to the currently selected Kuberne
 
 ### Load testing
 
-Load testing is done using [Molotov](https://molotov.readthedocs.io/en/stable/). 
-To start hammering the server with roughly 10k VU/s, run: 
+Load testing is done using [Molotov](https://molotov.readthedocs.io/en/stable/).
+To start hammering the server with roughly 10k VU/s, run:
 
 ```
 molotov test/load_test.py -w 1000 -p 10 -v
